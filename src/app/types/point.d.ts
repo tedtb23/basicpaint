@@ -1,3 +1,8 @@
+type Paths = {
+    currentPath: Path;
+    previousPath: Path | null;
+}
+
 type Path = {
     currentPoint: Point;
     previousPoint: Point | null;
