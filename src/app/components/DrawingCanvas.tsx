@@ -9,7 +9,7 @@ interface DrawingCanvasProps {
   canvasRef: RefObject<HTMLCanvasElement>
 }
 
-const DrawingCanvas = ({ id = "drawingCanvas", canvasRef }: DrawingCanvasProps) => {
+const DrawingCanvas = ({ id, canvasRef }: DrawingCanvasProps) => {
   return (
     <>
       <canvas

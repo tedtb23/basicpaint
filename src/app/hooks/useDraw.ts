@@ -1,11 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 
 export const useDraw = (
-  onDraw: (context: CanvasRenderingContext2D, paths: Paths, color: string, lineWidth: number) => void
+  onDraw: (context: CanvasRenderingContext2D, path: Path, color: string, lineWidth: number) => void
 , color: string, lineWidth: number) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const previousPoint = useRef<Point | null>(null);
-  const previousPath = useRef<Path | null>(null);
   const [mouseDown, setMouseDown] = useState(false);
 
   useEffect(() => {
@@ -15,10 +14,8 @@ export const useDraw = (
       const currentPoint = computeCanvasPoint(event);
       if (!context || !currentPoint) return;
       const currentPath = { currentPoint, previousPoint: previousPoint.current };
-      const paths = {currentPath, previousPath: previousPath.current};
-      onDraw(context, paths, color, lineWidth);
+      onDraw(context, currentPath, color, lineWidth);
       previousPoint.current = currentPoint;
-      previousPath.current = currentPath;
     };
 
     const computeCanvasPoint = (event: MouseEvent) => {
@@ -38,7 +35,6 @@ export const useDraw = (
     const upHandler = () => {
       setMouseDown(false);
       previousPoint.current = null;
-      previousPath.current = null;
     };
 
     canvasRef.current?.addEventListener("mousemove", moveHandler);

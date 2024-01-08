@@ -6,13 +6,18 @@ import { drawLine } from "./drawTypes";
 import { useDraw } from "./hooks/useDraw";
 import {handleClickClear} from "./clickTypes"
 import CanvasButton from "./components/CanvasButton";
+import CanvasSelect from "./components/CanvasSelect";
 
 const page = () => {
-  let lineWidth = 4;
+  const handleChangeItem = (item: string) => {
+    let itemN = Number(item);
+    setLineWidth(itemN);
+  }
 
+  const [lineWidth, setLineWidth] = useState(4);
   const [currColor, setCurrColor] = useState("#000");
 
-  const handleChange = (color: ColorResult) => {
+  const handleChangeColor = (color: ColorResult) => {
     setCurrColor(color.hex);
   };
   const { canvasRef } = useDraw(drawLine, currColor, lineWidth);
@@ -27,9 +32,17 @@ const page = () => {
         <ChromePicker
           disableAlpha={true}
           color={currColor}
-          onChange={handleChange}
+          onChange={handleChangeColor}
         />
         <CanvasButton type="reset" handleClick={handleClickClear} canvasRef={canvasRef}>Clear Canvas</CanvasButton>
+        <CanvasSelect
+          value={lineWidth}
+          handleChangeItem={handleChangeItem} 
+          >
+          <option value="4">4px</option>
+          <option value="6">6px</option>
+          <option value="8">8px</option>
+        </CanvasSelect>
       </div>
     </div>
     </>
