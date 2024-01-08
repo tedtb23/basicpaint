@@ -38,7 +38,7 @@ const page = () => {
         <CanvasSelect
           value={lineWidth}
           handleChangeItem={handleChangeItem} 
-          >
+        >
           <option value="4">4px</option>
           <option value="6">6px</option>
           <option value="8">8px</option>

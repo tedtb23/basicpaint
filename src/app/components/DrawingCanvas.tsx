@@ -1,7 +1,4 @@
 'use client'
-import {useDraw} from "../hooks/useDraw"
-import {drawLine} from "../drawTypes"
-import {useWindowDimensions} from "../hooks/useWindowDimensions"
 import { RefObject } from "react"
 
 interface DrawingCanvasProps {
