@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 interface CanvasSelectProps {
     children: ReactNode,
-    value: number,
+    value: string,
     name?: string
     id?: string;
     handleChangeItem: (item: string) => void
@@ -10,7 +10,9 @@ interface CanvasSelectProps {
 
 const CanvasSelect = ({children, value, name = "c_select", id, handleChangeItem}: CanvasSelectProps) => {
     return (
-        <select className="p-2.5 bg-zinc-900 text-white-700 font-semibold hover:bg-blue-500 hover:text-white-700 rounded border border-black-500 hover:border-white rounded"
+        <select className="px-[27px] py-2.5 mt-1 bg-zinc-900 text-white-700 font-semibold 
+        hover:bg-blue-500 hover:text-white-700 hover:border-white rounded
+        rounded border border-black-500"
         value={value}
         name={name} 
         id={id} 

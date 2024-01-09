@@ -1,26 +1,17 @@
 "use client";
-import { ColorResult, ChromePicker } from "react-color";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import DrawingCanvas from "./components/DrawingCanvas";
-import { drawLine } from "./drawTypes";
 import { useDraw } from "./hooks/useDraw";
-import {handleClickClear} from "./clickTypes"
 import CanvasButton from "./components/CanvasButton";
 import CanvasSelect from "./components/CanvasSelect";
+import ColorPicker from "./components/ColorPicker";
+import RenderCanvas from "./RenderCanvas";
 
 const page = () => {
-  const handleChangeItem = (item: string) => {
-    let itemN = Number(item);
-    setLineWidth(itemN);
-  }
-
-  const [lineWidth, setLineWidth] = useState(4);
+  const [lineWidth, setLineWidth] = useState("4");
   const [currColor, setCurrColor] = useState("#000");
-
-  const handleChangeColor = (color: ColorResult) => {
-    setCurrColor(color.hex);
-  };
-  const { canvasRef } = useDraw(drawLine, currColor, lineWidth);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  useDraw(canvasRef, currColor, Number(lineWidth), "Line");
   
   return (
     <>
@@ -29,20 +20,27 @@ const page = () => {
         <DrawingCanvas canvasRef={canvasRef}/>
       </div>
       <div className="absolute left-0 ">
-        <ChromePicker
-          disableAlpha={true}
-          color={currColor}
-          onChange={handleChangeColor}
-        />
-        <CanvasButton type="reset" handleClick={handleClickClear} canvasRef={canvasRef}>Clear Canvas</CanvasButton>
+        <ColorPicker handleChange={setCurrColor} currColor={currColor}></ColorPicker>
+        <CanvasButton 
+          type="reset" 
+          handleClick={() => RenderCanvas.clear(canvasRef, true)} 
+          >
+          Clear Canvas
+        </CanvasButton>
         <CanvasSelect
           value={lineWidth}
-          handleChangeItem={handleChangeItem} 
+          handleChangeItem={lWStr => setLineWidth(lWStr)} 
         >
           <option value="4">4px</option>
           <option value="6">6px</option>
           <option value="8">8px</option>
         </CanvasSelect>
+        <CanvasButton type="button" handleClick={() => RenderCanvas.undo(canvasRef)}>
+            Undo
+        </CanvasButton>
+        <CanvasButton type="button" handleClick={() => RenderCanvas.redo(canvasRef)}>
+          Redo
+        </CanvasButton>
       </div>
     </div>
     </>

@@ -1,21 +1,33 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, RefObject } from "react";
+import RenderCanvas from "../RenderCanvas"
 
-export const useDraw = (
-  onDraw: (context: CanvasRenderingContext2D, path: Path, color: string, lineWidth: number) => void
-, color: string, lineWidth: number) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const previousPoint = useRef<Point | null>(null);
+export const useDraw = (canvasRef: RefObject<HTMLCanvasElement>, color: string, 
+  lineWidth: number, drawType: string) => {
+
+  const prevPoint = useRef<Point | null>(null);
+  const currDraw = useRef<CanvasElement | null>(null);
   const [mouseDown, setMouseDown] = useState(false);
 
   useEffect(() => {
     const moveHandler = (event: MouseEvent) => {
       if (!mouseDown) return;
-      const context = canvasRef.current?.getContext("2d");
-      const currentPoint = computeCanvasPoint(event);
-      if (!context || !currentPoint) return;
-      const currentPath = { currentPoint, previousPoint: previousPoint.current };
-      onDraw(context, currentPath, color, lineWidth);
-      previousPoint.current = currentPoint;
+
+      const context = canvasRef?.current?.getContext("2d");
+      const currPoint = computeCanvasPoint(event);
+      if (!context || !currPoint) return;
+      if(!currDraw.current) currDraw.current = {components: []};
+      switch(drawType) {
+        case "Line":
+          const currLine: Line= {type: drawType, startPoint: prevPoint.current, endPoint: currPoint, 
+            lineColor: color, lineWidth: lineWidth };
+          currDraw.current.components.push(currLine);
+          RenderCanvas.renderLine(context, currLine);
+          prevPoint.current = currPoint;
+        break;
+        case "Rect":
+
+        break;
+      }
     };
 
     const computeCanvasPoint = (event: MouseEvent) => {
@@ -33,8 +45,12 @@ export const useDraw = (
     };
 
     const upHandler = () => {
+      if(currDraw.current) {
+        RenderCanvas.pushDraw(currDraw.current);
+        currDraw.current = null;
+      }
       setMouseDown(false);
-      previousPoint.current = null;
+      prevPoint.current = null;
     };
 
     canvasRef.current?.addEventListener("mousemove", moveHandler);
@@ -47,5 +63,5 @@ export const useDraw = (
     };
   });
 
-  return {canvasRef};
+  return;
 };
