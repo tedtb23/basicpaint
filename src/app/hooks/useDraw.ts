@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useRef, useEffect, RefObject } from "react";
 import RenderCanvas from "../RenderCanvas"
 
@@ -5,29 +7,32 @@ export const useDraw = (canvasRef: RefObject<HTMLCanvasElement>, color: string,
   lineWidth: number, drawType: string) => {
 
   const prevPoint = useRef<Point | null>(null);
-  const currDraw = useRef<CanvasElement | null>(null);
+  const currElement = useRef<CanvasElement | null>(null);
   const [mouseDown, setMouseDown] = useState(false);
 
   useEffect(() => {
     const moveHandler = (event: MouseEvent) => {
       if (!mouseDown) return;
-
-      const context = canvasRef?.current?.getContext("2d");
+      const context = canvasRef.current?.getContext("2d");
       const currPoint = computeCanvasPoint(event);
       if (!context || !currPoint) return;
-      if(!currDraw.current) currDraw.current = {components: []};
+      if(!currElement.current) currElement.current = {components: []};
+      let currComponent: Line | Rect;
       switch(drawType) {
         case "Line":
-          const currLine: Line= {type: drawType, startPoint: prevPoint.current, endPoint: currPoint, 
+           currComponent = {type: drawType, startPoint: prevPoint.current, endPoint: currPoint, 
             lineColor: color, lineWidth: lineWidth };
-          currDraw.current.components.push(currLine);
-          RenderCanvas.renderLine(context, currLine);
-          prevPoint.current = currPoint;
         break;
         case "Rect":
-
+            currComponent = {type: drawType, topLeft: prevPoint.current ?? currPoint, 
+              botRight: currPoint, lineColor: color, lineWidth: lineWidth, fill: true};
         break;
+        default:
+          throw new Error("Unknown Draw Type on Canvas Render");
       }
+      currElement.current.components.push(currComponent);
+      RenderCanvas.renderElementComponent(context, currComponent);
+      prevPoint.current = currPoint;
     };
 
     const computeCanvasPoint = (event: MouseEvent) => {
@@ -45,9 +50,9 @@ export const useDraw = (canvasRef: RefObject<HTMLCanvasElement>, color: string,
     };
 
     const upHandler = () => {
-      if(currDraw.current) {
-        RenderCanvas.pushDraw(currDraw.current);
-        currDraw.current = null;
+      if(currElement.current) {
+        RenderCanvas.pushElement(currElement.current);
+        currElement.current = null;
       }
       setMouseDown(false);
       prevPoint.current = null;

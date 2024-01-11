@@ -5,6 +5,7 @@ interface buttonProps {
   type: "reset" | "submit" | "button",
   name?: string;
   id?: string,
+  style?: string,
   handleClick: () => void
 }
 
@@ -13,17 +14,20 @@ const CanvasButton = ({
   type,
   name = "c_button",
   id,
+  style,
   handleClick
 }: buttonProps) => {
+  style += " bg-zinc-900 text-center text-white-700 font-semibold" 
+  + " hover:bg-blue-500 hover:text-white-700 hover:border-white rounded" 
+  + " rounded border border-zinc-50";
+
   return (
     <>
       <button
           type={type}
           name={name}
           id={id}
-          className="p-2 mt-1 bg-zinc-900 text-white-700 font-semibold
-          hover:bg-blue-500 hover:text-white-700 hover:border-white rounded
-          rounded border border-black-500"
+          className={style}
           onClick={handleClick}
         >
           {children}

@@ -1,19 +1,29 @@
-'use client'
-import { RefObject } from "react"
+'use client';
+import { RefObject, useEffect } from "react"
+import { useWindowDimensions } from "../hooks/useWindowDimensions";
 
 interface DrawingCanvasProps {
   id?: string,
-  canvasRef: RefObject<HTMLCanvasElement>
+  canvasRef: RefObject<HTMLCanvasElement>,
+  style?: string
 }
 
-const DrawingCanvas = ({ id, canvasRef }: DrawingCanvasProps) => {
+const DrawingCanvas = ({ id, canvasRef, style }: DrawingCanvasProps) => {
+    let width = 1400;
+    let height = 600;
+
+  //const windowDimensions = useWindowDimensions(canvasRef);
+  //width = windowDimensions?.width ?? width;
+  //height = windowDimensions?.height ?? height
+
+  style += " bg-stone-400 border border-black rounded"
   return (
     <>
       <canvas
-      className="bg-stone-400 border border-black rounded"
+      className={style}
       id={id}
-      width="1000"
-      height="600"
+      width={width*(3/4)}
+      height={height}
       ref={canvasRef}
       >
       Canvas for drawing

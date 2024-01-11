@@ -2,10 +2,7 @@
 import { useState, useRef } from "react";
 import DrawingCanvas from "./components/DrawingCanvas";
 import { useDraw } from "./hooks/useDraw";
-import CanvasButton from "./components/CanvasButton";
-import CanvasSelect from "./components/CanvasSelect";
-import ColorPicker from "./components/ColorPicker";
-import RenderCanvas from "./RenderCanvas";
+import CanvasSidebar from "./components/CanvasSidebar";
 
 const page = () => {
   const [lineWidth, setLineWidth] = useState("4");
@@ -15,33 +12,15 @@ const page = () => {
   
   return (
     <>
-    <div className="relative w-screen h-screen bg-zinc-900">
-      <div className="absolute right-0 ">
-        <DrawingCanvas canvasRef={canvasRef}/>
-      </div>
-      <div className="absolute left-0 ">
-        <ColorPicker handleChange={setCurrColor} currColor={currColor}></ColorPicker>
-        <CanvasButton 
-          type="reset" 
-          handleClick={() => RenderCanvas.clear(canvasRef, true)} 
-          >
-          Clear Canvas
-        </CanvasButton>
-        <CanvasSelect
-          value={lineWidth}
-          handleChangeItem={lWStr => setLineWidth(lWStr)} 
+    <div className="relative w-screen h-screen flex flex-row bg-zinc-900">
+      <div className="z-50 absolute left-0 overscroll-contain p-2 bg-zinc-900 rounded border border-zinc-50">
+        <CanvasSidebar currColor={currColor} setCurrColor={setCurrColor} 
+        lineWidth={lineWidth} setLineWidth={setLineWidth} 
+        canvasRef={canvasRef}
         >
-          <option value="4">4px</option>
-          <option value="6">6px</option>
-          <option value="8">8px</option>
-        </CanvasSelect>
-        <CanvasButton type="button" handleClick={() => RenderCanvas.undo(canvasRef)}>
-            Undo
-        </CanvasButton>
-        <CanvasButton type="button" handleClick={() => RenderCanvas.redo(canvasRef)}>
-          Redo
-        </CanvasButton>
+        </CanvasSidebar>
       </div>
+      <DrawingCanvas style="z-0 fixed top-0 right-0 " canvasRef={canvasRef}/>   
     </div>
     </>
   );

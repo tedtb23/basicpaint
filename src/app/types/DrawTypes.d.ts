@@ -12,4 +12,5 @@ type Rect = {
     botRight: Point;
     lineColor: string;
     lineWidth: number;
+    fill: boolean;
 }
