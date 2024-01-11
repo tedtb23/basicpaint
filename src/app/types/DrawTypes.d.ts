@@ -1,5 +1,9 @@
+type DrawTypes = {
+    type: string = "Brush" | "Line" | "Rect";
+}
+
 type Line = {
-    type: string = "Line"
+    type: string = "Line";
     startPoint: Point | null;
     endPoint: Point;
     lineColor: string;
@@ -7,7 +11,7 @@ type Line = {
 }
 
 type Rect = {
-    type: string = "Rect"
+    type: string = "Rect";
     topLeft: Point;
     botRight: Point;
     lineColor: string;

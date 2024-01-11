@@ -4,11 +4,11 @@ import { useWindowDimensions } from "../hooks/useWindowDimensions";
 
 interface DrawingCanvasProps {
   id?: string,
-  canvasRef: RefObject<HTMLCanvasElement>,
-  style?: string
+  style?: string,
+  canvasRef: RefObject<HTMLCanvasElement>
 }
 
-const DrawingCanvas = ({ id, canvasRef, style }: DrawingCanvasProps) => {
+const DrawingCanvas = ({ id, style, canvasRef }: DrawingCanvasProps) => {
     let width = 1400;
     let height = 600;
 
@@ -16,17 +16,17 @@ const DrawingCanvas = ({ id, canvasRef, style }: DrawingCanvasProps) => {
   //width = windowDimensions?.width ?? width;
   //height = windowDimensions?.height ?? height
 
-  style += " bg-stone-400 border border-black rounded"
+  style += " cursor-crosshair bg-stone-400 border border-black rounded"
   return (
     <>
       <canvas
-      className={style}
-      id={id}
-      width={width*(3/4)}
-      height={height}
-      ref={canvasRef}
+        className={style}
+        id={id}
+        width={width*(3/4)}
+        height={height}
+        ref={canvasRef}
       >
-      Canvas for drawing
+        Canvas for drawing
       </canvas>
     </>
   );

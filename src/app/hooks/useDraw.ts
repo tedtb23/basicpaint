@@ -4,12 +4,11 @@ import { useState, useRef, useEffect, RefObject } from "react";
 import RenderCanvas from "../RenderCanvas"
 
 export const useDraw = (canvasRef: RefObject<HTMLCanvasElement>, color: string, 
-  lineWidth: number, drawType: string) => {
+  lineWidth: number, drawType: DrawTypes) => {
 
   const prevPoint = useRef<Point | null>(null);
   const currElement = useRef<CanvasElement | null>(null);
   const [mouseDown, setMouseDown] = useState(false);
-
   useEffect(() => {
     const moveHandler = (event: MouseEvent) => {
       if (!mouseDown) return;
@@ -18,13 +17,13 @@ export const useDraw = (canvasRef: RefObject<HTMLCanvasElement>, color: string,
       if (!context || !currPoint) return;
       if(!currElement.current) currElement.current = {components: []};
       let currComponent: Line | Rect;
-      switch(drawType) {
-        case "Line":
-           currComponent = {type: drawType, startPoint: prevPoint.current, endPoint: currPoint, 
+      switch(drawType.type) {
+        case "Brush":
+           currComponent = {type: "Line", startPoint: prevPoint.current, endPoint: currPoint, 
             lineColor: color, lineWidth: lineWidth };
         break;
         case "Rect":
-            currComponent = {type: drawType, topLeft: prevPoint.current ?? currPoint, 
+            currComponent = {type: drawType.type, topLeft: prevPoint.current ?? currPoint, 
               botRight: currPoint, lineColor: color, lineWidth: lineWidth, fill: true};
         break;
         default:

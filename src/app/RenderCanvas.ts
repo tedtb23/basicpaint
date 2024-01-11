@@ -47,7 +47,7 @@ class RenderCanvas{
   };
 
   public static undo = (canvasRef: RefObject<HTMLCanvasElement>) => {
-    const context = canvasRef?.current?.getContext("2d");
+    const context = canvasRef.current?.getContext("2d");
     if(this.contentPos >= 0 && context) {
       this.contentPos--;
       this.clear(canvasRef, false);
@@ -62,7 +62,7 @@ class RenderCanvas{
   };
 
   public static redo = (canvasRef: RefObject<HTMLCanvasElement>) => {
-    const context = canvasRef?.current?.getContext("2d");
+    const context = canvasRef.current?.getContext("2d");
     if(this.contentPos < this.content.length - 1 && context) {
       const element = this.content[++this.contentPos];
       for(let component of element.components) {
