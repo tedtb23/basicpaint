@@ -3,34 +3,53 @@
 import { useState, useRef, useEffect, RefObject } from "react";
 import RenderCanvas from "../RenderCanvas"
 
-export const useDraw = (canvasRef: RefObject<HTMLCanvasElement>, color: string, 
-  lineWidth: number, drawType: DrawTypes) => {
+export const useDraw = (
+  canvasRef: RefObject<HTMLCanvasElement>,
+  color: string, 
+  lineWidth: number, 
+  drawType: DrawTypes) => {
 
+  const startPoint = useRef<Point | null>(null);
   const prevPoint = useRef<Point | null>(null);
-  const currElement = useRef<CanvasElement | null>(null);
   const [mouseDown, setMouseDown] = useState(false);
+
   useEffect(() => {
+
     const moveHandler = (event: MouseEvent) => {
       if (!mouseDown) return;
-      const context = canvasRef.current?.getContext("2d");
       const currPoint = computeCanvasPoint(event);
-      if (!context || !currPoint) return;
-      if(!currElement.current) currElement.current = {components: []};
-      let currComponent: Line | Rect;
+      if (!currPoint) return;
+      if(!startPoint.current) startPoint.current = currPoint;
+
+      let currComponent: any;
       switch(drawType.type) {
         case "Brush":
-           currComponent = {type: "Line", startPoint: prevPoint.current, endPoint: currPoint, 
+          currComponent = {type: "Line", startPoint: prevPoint.current, endPoint: currPoint, 
             lineColor: color, lineWidth: lineWidth };
+          RenderCanvas.pushAndRender(currComponent);
+        break;
+        case "Line": 
+          currComponent = {type: "Line", startPoint: startPoint.current, endPoint: currPoint, 
+            lineColor: color, lineWidth: lineWidth };
+          if(prevPoint.current) RenderCanvas.undo();
+          RenderCanvas.pushAndRender(currComponent);
+          RenderCanvas.clearBuf(true);
         break;
         case "Rect":
-            currComponent = {type: drawType.type, topLeft: prevPoint.current ?? currPoint, 
-              botRight: currPoint, lineColor: color, lineWidth: lineWidth, fill: true};
+          currComponent = {type: drawType.type, startPoint: startPoint.current, 
+            endPoint: currPoint, color: color};
+          if(prevPoint.current) RenderCanvas.undo();
+          RenderCanvas.pushAndRender(currComponent);
+          RenderCanvas.clearBuf(true);
+        break;
+        case "Erase":
+          currComponent = {type: "Erase", startPoint: prevPoint.current, endPoint: currPoint, 
+            lineColor: 'rgba(0, 0, 0, 1)', lineWidth: lineWidth };
+          RenderCanvas.pushAndRender(currComponent);
         break;
         default:
           throw new Error("Unknown Draw Type on Canvas Render");
       }
-      currElement.current.components.push(currComponent);
-      RenderCanvas.renderElementComponent(context, currComponent);
       prevPoint.current = currPoint;
     };
 
@@ -49,11 +68,9 @@ export const useDraw = (canvasRef: RefObject<HTMLCanvasElement>, color: string,
     };
 
     const upHandler = () => {
-      if(currElement.current) {
-        RenderCanvas.pushElement(currElement.current);
-        currElement.current = null;
-      }
+      RenderCanvas.clearBuf(true);
       setMouseDown(false);
+      startPoint.current = null;
       prevPoint.current = null;
     };
 

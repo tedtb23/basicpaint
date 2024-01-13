@@ -16,7 +16,7 @@ const DrawingCanvas = ({ id, style, canvasRef }: DrawingCanvasProps) => {
   //width = windowDimensions?.width ?? width;
   //height = windowDimensions?.height ?? height
 
-  style += " cursor-crosshair bg-stone-400 border border-black rounded"
+  style += " cursor-crosshair object-scale-down bg-stone-400 border border-black rounded"
   return (
     <>
       <canvas

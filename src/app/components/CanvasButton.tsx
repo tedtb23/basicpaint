@@ -6,7 +6,8 @@ interface buttonProps {
   name?: string;
   id?: string,
   style?: string,
-  handleClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  handleClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void,
+  buttonRef?: RefObject<HTMLButtonElement>
 }
 
 const CanvasButton = ({
@@ -15,7 +16,8 @@ const CanvasButton = ({
   name = "c_button",
   id,
   style,
-  handleClick
+  handleClick,
+  buttonRef
 }: buttonProps) => {
   style += " text-center text-white-700 font-semibold" 
   + " hover:bg-blue-500" 
@@ -28,6 +30,7 @@ const CanvasButton = ({
         id={id}
         className={style}
         onClick={e => handleClick(e)}
+        ref={buttonRef}
     >
         {children}
     </button>

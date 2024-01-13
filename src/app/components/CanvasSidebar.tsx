@@ -4,9 +4,11 @@ import RenderCanvas from "../RenderCanvas";
 import CanvasButton from "./CanvasButton";
 import CanvasSelect from "./CanvasSelect";
 import ColorPicker from "./ColorPicker";
-import BrushPNG from "../../images/Brush.png"
-import StraightLinePNG from "../../images/Straight Line.png"
-import { RefObject, useState } from "react";
+import getDrawTypeStyles from "../getDrawTypeStyles";
+import BrushPNG from "../../images/Brush.png";
+import StraightLinePNG from "../../images/Straight Line.png";
+import RectanglePNG from "../../images/Rectangle.png"
+import ErasePNG from "../../images/Erase.png"
 
 
 interface CanvasSidebarProps {
@@ -14,38 +16,19 @@ interface CanvasSidebarProps {
     setCurrColor: (color: string) => void,
     lineWidth: string,
     setLineWidth: (lWStr: string) => void,
-    canvasRef: RefObject<HTMLCanvasElement>
+    drawType: DrawTypes,
+    setDrawType: (drawType: DrawTypes) => void
 }
 
-const CanvasSidebar = ({currColor, setCurrColor, 
-    lineWidth, setLineWidth, canvasRef}: CanvasSidebarProps ) => {
+const CanvasSidebar = ({
+    currColor, setCurrColor,
+    lineWidth, setLineWidth, 
+    drawType, setDrawType}: CanvasSidebarProps ) => {
     
-    const activeDrawStyle = "bg-blue-700 shadow-2xl shadow-blue-700";
-    const [brushStyle, setBrushStyle] = useState(activeDrawStyle);
-    const [lineStyle, setLineStyle]= useState("");
-    const [rectStyle, setRectStyle]= useState("");
-    const [eraseStyle, setEraseStyle] = useState("");
+    const [brushStyle, lineStyle, rectStyle, eraseStyle] = getDrawTypeStyles(drawType);
 
-    const handleDrawTypesClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-         setBrushStyle("");
-         setLineStyle("");
-         setRectStyle("");
-         setEraseStyle("");
-         switch(event.currentTarget.id) {
-            case "brush":
-                setBrushStyle(activeDrawStyle);
-            break;
-            case "line":
-                setLineStyle(activeDrawStyle);
-            break;
-            case "rect":
-                setRectStyle(activeDrawStyle);
-            break;
-            case "erase":
-                setEraseStyle(activeDrawStyle);
-            break;
-         };
-    };
+    const handleDrawTypesClick = 
+    (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => setDrawType({type: event.currentTarget.id});
 
     return(  
         <div className="flex flex-col">
@@ -54,7 +37,7 @@ const CanvasSidebar = ({currColor, setCurrColor,
                 id="clear"
                 style="my-2"
                 type="reset"
-                handleClick={() => RenderCanvas.clear(canvasRef, true)}
+                handleClick={() => RenderCanvas.clear(true)}
             >
                 Clear Canvas
             </CanvasButton>
@@ -62,7 +45,7 @@ const CanvasSidebar = ({currColor, setCurrColor,
                 id="undo"
                 style="mb-2"
                 type="button"
-                handleClick={() => RenderCanvas.undo(canvasRef)}
+                handleClick={() => RenderCanvas.undo()}
             >
                 Undo
             </CanvasButton>
@@ -70,7 +53,7 @@ const CanvasSidebar = ({currColor, setCurrColor,
                 id="redo"
                 style="mb-1"
                 type="button"
-                handleClick={() => RenderCanvas.redo(canvasRef)}
+                handleClick={() => RenderCanvas.redo()}
             >
                 Redo
             </CanvasButton>
@@ -86,7 +69,7 @@ const CanvasSidebar = ({currColor, setCurrColor,
             </CanvasSelect>
             <div className="grid grid-rows-2 grid-cols-2 place-content-between">
                 <CanvasButton
-                    id="brush" 
+                    id="Brush" 
                     style={brushStyle}
                     type="button" 
                     handleClick={e => handleDrawTypesClick(e)}
@@ -95,7 +78,7 @@ const CanvasSidebar = ({currColor, setCurrColor,
                     Brush
                 </CanvasButton>
                 <CanvasButton 
-                    id="line" 
+                    id="Line" 
                     style={lineStyle} 
                     type="button" 
                     handleClick={e => handleDrawTypesClick(e)}
@@ -104,21 +87,21 @@ const CanvasSidebar = ({currColor, setCurrColor,
                     Line
                 </CanvasButton>
                 <CanvasButton 
-                    id="rect" 
+                    id="Rect" 
                     style={rectStyle} 
                     type="button" 
                     handleClick={e => handleDrawTypesClick(e)}
                 >
-                    <img className="ml-7" src={StraightLinePNG.src}></img>
-                    Rect
+                    <img className="ml-[25px] my-2.5" src={RectanglePNG.src}></img>
+                    Rectangle
                 </CanvasButton>
                 <CanvasButton 
-                    id="erase" 
+                    id="Erase" 
                     style={eraseStyle} 
                     type="button" 
                     handleClick={e => handleDrawTypesClick(e)}
                 >
-                    <img className="ml-7" src={StraightLinePNG.src}></img>
+                    <img className="ml-[26px] my-2.5" src={ErasePNG.src}></img>
                     Erase
                 </CanvasButton>
             </div>
@@ -126,4 +109,4 @@ const CanvasSidebar = ({currColor, setCurrColor,
     );
 }
 
-export default CanvasSidebar;
+export default CanvasSidebar
