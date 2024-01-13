@@ -25,15 +25,13 @@ class RenderCanvas{
 
 
   /**
-   * Clears the buffer and optionally pushes all buffer contents to the undo/redo stack.
-   * Call this method with the push parameter set to true
-   * everytime you want to delineate how much is undone/redone between undo() and redo() calls.
-   * 
-   * @param push Determines whether buffer contents will be pushed onto the undo/redo stack.
+   * Clears the buffer and pushes all buffer contents to the undo/redo stack.
+   * Call this method everytime you want to delineate
+   * how much is undone/redone between undo() and redo() calls.
    */
-  public static clearBuf(push: boolean) {
+  public static clearBuf() {
     if(this.currComponentsBuf.components.length <= 0) return;
-    if(push) this.content[++this.contentPos] = Object.assign({}, this.currComponentsBuf);
+    this.content[++this.contentPos] = Object.assign({}, this.currComponentsBuf);
     this.currComponentsBuf.components = [];
     /*
     slice away the content at the end incase of these events 
@@ -42,7 +40,7 @@ class RenderCanvas{
     3. redo
     not doing this could cause behavior probably not intended by the user
     */
-    if(push) this.content = this.content.slice(0 , this.contentPos + 1);
+    this.content = this.content.slice(0 , this.contentPos + 1);
   }
 
 
@@ -50,8 +48,8 @@ class RenderCanvas{
    * Pushes the given component to the buffer and renders it.
    * 
    * Note: For the undo and redo method to work properly 
-   * clearBuf should be called with the push parameter set to true
-   * everytime you want to delineate a new undoable/redoable element.
+   * clearBuf should be called everytime you want to delineate
+   * a new undoable/redoable element.
    * 
    * @param component The component to render to the canvas context.
    */

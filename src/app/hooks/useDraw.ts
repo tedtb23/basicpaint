@@ -33,14 +33,14 @@ export const useDraw = (
             lineColor: color, lineWidth: lineWidth };
           if(prevPoint.current) RenderCanvas.undo();
           RenderCanvas.pushAndRender(currComponent);
-          RenderCanvas.clearBuf(true);
+          RenderCanvas.clearBuf();
         break;
         case "Rect":
           currComponent = {type: drawType.type, startPoint: startPoint.current, 
             endPoint: currPoint, color: color};
           if(prevPoint.current) RenderCanvas.undo();
           RenderCanvas.pushAndRender(currComponent);
-          RenderCanvas.clearBuf(true);
+          RenderCanvas.clearBuf();
         break;
         case "Erase":
           currComponent = {type: "Erase", startPoint: prevPoint.current, endPoint: currPoint, 
@@ -68,7 +68,7 @@ export const useDraw = (
     };
 
     const upHandler = () => {
-      RenderCanvas.clearBuf(true);
+      RenderCanvas.clearBuf();
       setMouseDown(false);
       startPoint.current = null;
       prevPoint.current = null;
