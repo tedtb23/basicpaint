@@ -3,36 +3,53 @@
 import RenderCanvas from "../RenderCanvas";
 import CanvasButton from "./CanvasButton";
 import CanvasSelect from "./CanvasSelect";
-import ColorPicker from "./ColorPicker";
 import getDrawTypeStyles from "../getDrawTypeStyles";
 import BrushPNG from "../../images/Brush.png";
 import StraightLinePNG from "../../images/Straight Line.png";
 import RectanglePNG from "../../images/Rectangle.png"
 import ErasePNG from "../../images/Erase.png"
+import CanvasColorPicker from "./CanvasColorPicker";
+import CanvasInput from "./CanvasInput";
+import CanvasLink from "./CanvasLink";
 
 
 interface CanvasSidebarProps {
-    currColor: string,
-    setCurrColor: (color: string) => void,
+    style?: string,
+    color: string,
+    setColor: (color: string) => void,
     lineWidth: string,
     setLineWidth: (lWStr: string) => void,
     drawType: DrawTypes,
-    setDrawType: (drawType: DrawTypes) => void
+    setDrawType: (drawType: DrawTypes) => void,
 }
 
+/**
+ * 
+ * @returns A sidebar component with controls for RenderCanvas's canvas.
+ */
 const CanvasSidebar = ({
-    currColor, setCurrColor,
+    style,
+    color, setColor,
     lineWidth, setLineWidth, 
     drawType, setDrawType}: CanvasSidebarProps ) => {
+
+    style += " flex flex-col";
     
+    //change the Tailwind styles of the draw type buttons depending on the active draw type.
     const [brushStyle, lineStyle, rectStyle, eraseStyle] = getDrawTypeStyles(drawType);
 
+    //change the current draw type to the clicked draw type button.
     const handleDrawTypesClick = 
     (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => setDrawType({type: event.currentTarget.id});
 
     return(  
-        <div className="flex flex-col">
-            <ColorPicker handleChange={setCurrColor} currColor={currColor} />
+        <div className={style}>
+            <div className="flex flex-row">
+            <CanvasInput id="c_in_file" style="grow"/>
+            <CanvasLink href={RenderCanvas.toDataURL()} download="basicpaint image" style="grow">Save</CanvasLink>
+            </div>
+            
+            <CanvasColorPicker  color={color} setColor={setColor} />
             <CanvasButton
                 id="clear"
                 style="my-2"
@@ -74,8 +91,10 @@ const CanvasSidebar = ({
                     type="button" 
                     handleClick={e => handleDrawTypesClick(e)}
                 >
-                    <img className="ml-4" src={BrushPNG.src}></img>
-                    Brush
+                    <div className="grid grid-cols-1 grid-rows-3">
+                        <img className="row-span-3 place-self-center" src={BrushPNG.src}></img>
+                        Brush
+                    </div>
                 </CanvasButton>
                 <CanvasButton 
                     id="Line" 
@@ -83,8 +102,11 @@ const CanvasSidebar = ({
                     type="button" 
                     handleClick={e => handleDrawTypesClick(e)}
                 >
-                    <img className="ml-7" src={StraightLinePNG.src}></img>
-                    Line
+                    <div className="grid grid-cols-1 grid-rows-3">
+                        <img className="row-span-3 place-self-center" src={StraightLinePNG.src}></img>
+                        Line
+                    </div>
+                    
                 </CanvasButton>
                 <CanvasButton 
                     id="Rect" 
@@ -92,8 +114,10 @@ const CanvasSidebar = ({
                     type="button" 
                     handleClick={e => handleDrawTypesClick(e)}
                 >
-                    <img className="ml-[25px] my-2.5" src={RectanglePNG.src}></img>
-                    Rectangle
+                    <div className="grid grid-cols-1 grid-rows-3 gap-1.5 mt-3">
+                        <img className="row-span-2 place-self-center" src={RectanglePNG.src}></img>
+                        Rectangle
+                    </div>
                 </CanvasButton>
                 <CanvasButton 
                     id="Erase" 
@@ -101,8 +125,10 @@ const CanvasSidebar = ({
                     type="button" 
                     handleClick={e => handleDrawTypesClick(e)}
                 >
-                    <img className="ml-[26px] my-2.5" src={ErasePNG.src}></img>
-                    Erase
+                    <div className="grid grid-cols-1 grid-rows-3 gap-1 mt-3">
+                        <img className="row-span-2 place-self-center" src={ErasePNG.src}></img>
+                        Erase
+                    </div>
                 </CanvasButton>
             </div>
         </div>

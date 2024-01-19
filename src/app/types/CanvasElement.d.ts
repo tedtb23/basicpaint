@@ -1,4 +1,3 @@
 type CanvasElement = {
-    components: (Line | Rect)[];
-    
+    components: (Line | Rect | Image)[];
 }

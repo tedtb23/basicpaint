@@ -1,4 +1,5 @@
-import { ReactNode } from "react";
+'use client';
+import { ReactNode, RefObject } from "react";
 
 interface CanvasSelectProps {
     children: ReactNode,
@@ -6,12 +7,24 @@ interface CanvasSelectProps {
     name?: string,
     id?: string,
     style?: string,
-    handleChangeItem: (item: string) => void
+    handleChangeItem: (item: string) => void,
+    selectRef?: RefObject<HTMLSelectElement>;
 }
 
-const CanvasSelect = ({children, value, name = "c_select", 
-    id, style, handleChangeItem}: CanvasSelectProps) => {
-    style += " py-1.5 bg-zinc-900 text-center text-white-700 font-semibold"
+/**
+ * 
+ * @returns A selection component with a preset Tailwind style.
+ */
+const CanvasSelect = ({
+    children, 
+    value, 
+    name = "c_select", 
+    id, 
+    style, 
+    handleChangeItem,
+    selectRef}: CanvasSelectProps) => {
+
+    style += " py-1.5 bg-neutral-800 text-center text-white-700 font-semibold"
     + " hover:bg-blue-500"
     + " rounded border border-zinc-50";
 
@@ -22,6 +35,7 @@ const CanvasSelect = ({children, value, name = "c_select",
             name={name} 
             id={id} 
             onChange={e => handleChangeItem(e.target.value)}
+            ref={selectRef}
         >
             {children}
         </select>

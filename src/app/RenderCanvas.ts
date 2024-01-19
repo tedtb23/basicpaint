@@ -1,16 +1,24 @@
 'use client';
 import { RefObject } from "react";
 /**
- * Provides logic for rendering several different draw types to a canvas.
+ * Provides a public interface for drawing on an HTML Canvas with undo/redo functionality.
  * Must call setCanvasRef first with a canvas reference before using class methods.
  */
 class RenderCanvas{
-
   private static canvasRef: RefObject<HTMLCanvasElement>;
+  private static savedCanvas: string | null;
   private static currComponentsBuf: CanvasElement = {components: []};
   private static content: CanvasElement[] = [];
   private static contentPos: number = -1;
   private static context: CanvasRenderingContext2D | undefined | null;
+
+  /**
+   * 
+   * @returns The current canvas reference.
+   */
+  public static getCanvasRef() {
+    return this.canvasRef ?? null;
+  }
 
   /**
    * Sets the canvas reference for the class. 
@@ -53,36 +61,83 @@ class RenderCanvas{
    * 
    * @param component The component to render to the canvas context.
    */
-  public static pushAndRender (component: Line | Rect) {
+  public static pushAndRender (component: Line | Rect | Image) {
     this.render(component, true);
   }
 
-  /*
-  public static rerenderCanvas (canvasRef: RefObject<HTMLCanvasElement>) {
-    const context = canvasRef.current?.getContext("2d");
-    if(!context) return;
-    this.clear(canvasRef, false);
-    for(let element of this.content) {
-      for(let component of element.components) {
-        this.(context, component);
+  /**
+   * 
+   * @returns The current canvas in the format of a png image in a data URL.
+   */
+  public static toDataURL() {
+    return this.getCanvas()?.toDataURL() ?? "";
+  }
+
+  /**
+   * Saves the canvas state in a string data URL.
+   */
+  public static save() {
+    if(this.content.length <= 0) return;
+    const canvas = this.getCanvas();
+    if(!canvas) return;
+    this.savedCanvas = canvas.toDataURL("image/png");
+    this.clear(false);
+  }
+
+  /**
+   * Restores the saved canvas state to the canvas.
+   */
+  public static restore(scale?: {x: number, y: number}) {
+    if(!this.savedCanvas) return;
+    const ctx = this.getContext();
+    if(!ctx) return;
+    const img = new Image();
+    img.src = this.savedCanvas;
+    img.onload = () => ctx.drawImage(img, 0, 0);
+    this.savedCanvas = null;
+    if(scale) this.scale(scale);
+  }
+
+  public static rerender(scale: {x: number, y: number}) {
+    if(this.content.length >= 0) {
+      this.clear(false);
+      for(let element of this.content) {
+        for(let component of element.components) {
+          this.render(component, false);
+        }
       }
+      this.scale({x: scale.x, y: scale.y});
     }
   }
-  */
 
+  public static scale(scale: {x: number, y: number}) {
+    const ctx = this.getContext();
+    if(!ctx) return;
+    ctx.scale(scale.x, scale.y);
+  }
+  
+  /**
+   * Clears all the content from the canvas.
+   * @param clearContent Determines whether or not undo/redo stack will be cleared.
+   */
   public static clear (clearContent: boolean) {
     if(clearContent) {
       this.content = [];
       this.currComponentsBuf.components = [];
       this.contentPos = -1;
     }
-    const canvas = this.canvasRef?.current;
-    if(!canvas) throw new Error("RenderCanvas has no canvas (has setCanvasRef been called?)");
-    this.context?.beginPath();
-    this.context?.clearRect(0, 0, canvas.width, canvas.height);
-    this.context?.closePath();
+
+    const ctx = this.getContext();
+    const canvas = this.getCanvas();
+    if(!canvas || !ctx) return;
+    ctx.beginPath();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.closePath();
   };
 
+  /**
+   * Undoes the previous action taken on the canvas delineated by calls to clearBuf.
+   */
   public static undo () {
     if(this.contentPos >= 0) {
       this.contentPos--;
@@ -96,6 +151,9 @@ class RenderCanvas{
     }
   };
 
+  /**
+   * Redoes the previous action taken on the canvas delineated by calls to clearBuf.
+   */
   public static redo () {
     if(this.contentPos < this.content.length - 1) {
       const element = this.content[++this.contentPos];
@@ -105,7 +163,12 @@ class RenderCanvas{
     }
   };
 
-  private static render (component: Line | Rect, push: boolean) {
+  /**
+   * Renders the given component to the canvas.
+   * @param component The component to render to the canvas.
+   * @param push Determines whether or not the given component will be pushed into the current component buffer.
+   */
+  private static render (component: Line | Rect | Image, push: boolean) {
     switch(component.type) {
       case "Line":
         // @ts-ignore
@@ -119,15 +182,23 @@ class RenderCanvas{
         //@ts-ignore
         this.erase(component);
       break;
+      case "Image":
+        //@ts-ignore
+        this.renderImage(component);
+      break;
       default:
         throw new Error("Unknown Draw Type on Canvas Render");
     }
     if(push) this.currComponentsBuf.components.push(component);
   };
   
+  /**
+   * Renders the given line to the canvas.
+   * @param line The line to render to the canvas.
+   */
   private static renderLine (line: Line) {
-    const ctx = this.context;
-    if(!ctx) throw new Error("RenderCanvas has no context (has setCanvasRef been called?)");
+    const ctx = this.getContext();
+    if(!ctx) return;
     const startPoint = line.startPoint ?? line.endPoint;
     const endPoint = line.endPoint;
     const color = line.lineColor;
@@ -150,9 +221,13 @@ class RenderCanvas{
     ctx.closePath();
   };
 
+  /**
+   * Renders the given rectangle to the canvas.
+   * @param rect The rectangle to render to the canvas.
+   */
   private static renderRect (rect: Rect) {
-    const ctx = this.context;
-    if(!ctx) throw new Error("RenderCanvas has no context (has setCanvasRef been called?)");
+    const ctx = this.getContext();
+    if(!ctx) return;
     ctx.fillStyle = rect.color;
     const startPoint = rect.startPoint;
     const endPoint = rect.endPoint;
@@ -175,9 +250,14 @@ class RenderCanvas{
     ctx.closePath();
   };
 
+  /**
+   * Erases a rectangle surrounding the 
+   * given lines startpoint (or endpoint if the line's startpoint is null) from the canvas.
+   * @param line The line who's surroundings at the startpoint will be erased.
+   */
   private static erase(line: Line) {
-    const ctx = this.context;
-    if(!ctx) throw new Error("RenderCanvas has no context (has setCanvasRef been called?)");
+    const ctx = this.getContext();
+    if(!ctx) return;
     const startPoint = line.startPoint ?? line.endPoint;
     const lWidth = line.lineWidth;
 
@@ -186,6 +266,26 @@ class RenderCanvas{
     ctx.fillStyle = "#000";
     ctx.clearRect(startPoint.x - 6, startPoint.y - 6, lWidth + 10, lWidth + 10);
     ctx.closePath();
+  };
+
+  /**
+   * Renders the given image to the canvas.
+   * @param image The image to render to the canvas.
+   */
+  private static renderImage(image: Image) {
+    const ctx = this.getContext();
+    if(!ctx) return;
+    ctx.drawImage(image.img, 0, 0);
+  };
+
+  private static getCanvas() {
+    //if(!this.canvasRef?.current) throw new Error("RenderCanvas has no canvas (has setCanvasRef been called?)");
+    return this.canvasRef.current ?? null;
+  }
+
+  private static getContext() {
+    //if(!this.context) throw new Error("RenderCanvas has no context (has setCanvasRef been called?)");
+    return this.context ?? null;
   }
 };
 export default RenderCanvas;

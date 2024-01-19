@@ -1,3 +1,4 @@
+'use client';
 import { ReactNode, RefObject } from "react";
 
 interface buttonProps {
@@ -10,6 +11,9 @@ interface buttonProps {
   buttonRef?: RefObject<HTMLButtonElement>
 }
 
+/**
+ * @returns A button component with a preset Tailwind style.
+ */
 const CanvasButton = ({
   children,
   type,

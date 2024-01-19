@@ -1,34 +1,35 @@
-"use client";
-import { useState, useRef } from "react";
+'use client';
+import { useState, useRef, useEffect } from "react";
 import DrawingCanvas from "./components/DrawingCanvas";
-import { useDraw } from "./hooks/useDraw";
+import { useDraw } from "./hooks/useDraw"
 import CanvasSidebar from "./components/CanvasSidebar";
 import RenderCanvas from "./RenderCanvas";
 
+/**
+ * @returns The main page of the application with a canvas and a sidebar that controls the canvas.
+ */
 const page = () => {
-  const [currColor, setCurrColor] = useState("#000");
+  const [color, setColor] = useState("#000");
   const [lineWidth, setLineWidth] = useState("4");
   const [drawType, setDrawType] = useState({type: "Brush"});
   const canvasRef = useRef<HTMLCanvasElement>(null);
   RenderCanvas.setCanvasRef(canvasRef);
-  useDraw(canvasRef, currColor, Number(lineWidth), drawType);
+  useDraw(color, Number(lineWidth), drawType);
   
   return (
-    <div className="relative w-screen h-screen overscroll-auto flex flex-row bg-zinc-900">
-      <div className="z-50 absolute left-0 overscroll-contain p-2 bg-zinc-900 rounded border border-zinc-50">
+    <div className="relative w-screen h-screen overflow-scroll bg-black">
         <CanvasSidebar 
-          currColor={currColor} 
-          setCurrColor={setCurrColor}
+          style="z-50 absolute top-0 left-0 p-2 bg-neutral-800 rounded border border-zinc-50"
+          color={color} 
+          setColor={setColor}
           lineWidth={lineWidth} 
           setLineWidth={setLineWidth} 
           drawType={drawType}
           setDrawType={setDrawType}
         />
-      </div>
-      <DrawingCanvas 
-        style="z-0 fixed top-0 right-0" 
-        canvasRef={canvasRef}
-      />   
+        <DrawingCanvas 
+          style="z-0 fixed top-0 right-0"
+        />
     </div>
   );
 };
