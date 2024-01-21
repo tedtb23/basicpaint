@@ -15,7 +15,6 @@ export const useCanvasResize = () => {
             const { innerWidth: width, innerHeight: height } = window;
             const xr = (width / size.x);
             const yr = (height / size.y);
-            console.log("scaleX: " + xr + " scaleY: " + yr)
             //RenderCanvas.save();
             setSize({x: width, y: height});
             //RenderCanvas.restore({x: xr, y: yr});

@@ -4,17 +4,20 @@ import RenderCanvas from "../RenderCanvas";
 import CanvasButton from "./CanvasButton";
 import CanvasSelect from "./CanvasSelect";
 import getDrawTypeStyles from "../getDrawTypeStyles";
-import BrushPNG from "../../images/Brush.png";
-import StraightLinePNG from "../../images/Straight Line.png";
-import RectanglePNG from "../../images/Rectangle.png"
-import ErasePNG from "../../images/Erase.png"
 import CanvasColorPicker from "./CanvasColorPicker";
 import CanvasInput from "./CanvasInput";
 import CanvasLink from "./CanvasLink";
+import { useState } from "react";
+import BrushPNG from "../../images/Brush.png";
+import StraightLinePNG from "../../images/Straight Line.png";
+import RectanglePNG from "../../images/Rectangle.png";
+import ErasePNG from "../../images/Erase.png";
+import HamburgerPNG from "../../images/Hamburger.png"
 
 
 interface CanvasSidebarProps {
     style?: string,
+    id?: string,
     color: string,
     setColor: (color: string) => void,
     lineWidth: string,
@@ -29,12 +32,14 @@ interface CanvasSidebarProps {
  */
 const CanvasSidebar = ({
     style,
+    id,
     color, setColor,
     lineWidth, setLineWidth, 
     drawType, setDrawType}: CanvasSidebarProps ) => {
 
-    style += " flex flex-col";
-    
+    const [open, setOpen] = useState(true);
+    style += " ";
+
     //change the Tailwind styles of the draw type buttons depending on the active draw type.
     const [brushStyle, lineStyle, rectStyle, eraseStyle] = getDrawTypeStyles(drawType);
 
@@ -43,94 +48,110 @@ const CanvasSidebar = ({
     (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => setDrawType({type: event.currentTarget.id});
 
     return(  
-        <div className={style}>
-            <div className="flex flex-row">
-            <CanvasInput id="c_in_file" style="grow"/>
-            <CanvasLink href={RenderCanvas.toDataURL()} download="basicpaint image" style="grow">Save</CanvasLink>
-            </div>
-            
-            <CanvasColorPicker  color={color} setColor={setColor} />
-            <CanvasButton
-                id="clear"
-                style="my-2"
-                type="reset"
-                handleClick={() => RenderCanvas.clear(true)}
+        <div className={style} id={id}>
+            <CanvasButton 
+              style="border-neutral-800"
+              type="button"
+              id="sidebar_toggle"
+              handleClick={() => setOpen(!open)}
             >
-                Clear Canvas
+              <img src={HamburgerPNG.src}></img>
             </CanvasButton>
-            <CanvasButton
-                id="undo"
-                style="mb-2"
-                type="button"
-                handleClick={() => RenderCanvas.undo()}
-            >
-                Undo
-            </CanvasButton>
-            <CanvasButton
-                id="redo"
-                style="mb-1"
-                type="button"
-                handleClick={() => RenderCanvas.redo()}
-            >
-                Redo
-            </CanvasButton>
-            <CanvasSelect
-                id="lineWidth"
-                style="mb-2 mt-1"
-                value={lineWidth}
-                handleChangeItem={lWStr => setLineWidth(lWStr)}
-            >
-                <option value="4">4px</option>
-                <option value="6">6px</option>
-                <option value="8">8px</option>
-            </CanvasSelect>
-            <div className="grid grid-rows-2 grid-cols-2 place-content-between">
+            <div className={`flex flex-col ${open ? "": "hidden"}`}>
+                <div className="flex flex-row">
+                    <CanvasInput style="grow" id="c_in_file"/>
+                    <CanvasLink 
+                        href={RenderCanvas.toDataURL()}
+                        download="basicpaint image" 
+                        style="grow" 
+                        id="c_out_file"
+                    >
+                        Save
+                    </CanvasLink>
+                </div>
+                <CanvasColorPicker  color={color} setColor={setColor} />
                 <CanvasButton
-                    id="Brush" 
-                    style={brushStyle}
-                    type="button" 
-                    handleClick={e => handleDrawTypesClick(e)}
+                    id="clear"
+                    style="my-2"
+                    type="reset"
+                    handleClick={() => RenderCanvas.clear(true)}
                 >
-                    <div className="grid grid-cols-1 grid-rows-3">
-                        <img className="row-span-3 place-self-center" src={BrushPNG.src}></img>
-                        Brush
-                    </div>
+                    Clear Canvas
                 </CanvasButton>
-                <CanvasButton 
-                    id="Line" 
-                    style={lineStyle} 
-                    type="button" 
-                    handleClick={e => handleDrawTypesClick(e)}
+                <CanvasButton
+                    id="undo"
+                    style="mb-2"
+                    type="button"
+                    handleClick={() => RenderCanvas.undo()}
                 >
-                    <div className="grid grid-cols-1 grid-rows-3">
-                        <img className="row-span-3 place-self-center" src={StraightLinePNG.src}></img>
-                        Line
-                    </div>
-                    
+                    Undo
                 </CanvasButton>
-                <CanvasButton 
-                    id="Rect" 
-                    style={rectStyle} 
-                    type="button" 
-                    handleClick={e => handleDrawTypesClick(e)}
+                <CanvasButton
+                    id="redo"
+                    style="mb-1"
+                    type="button"
+                    handleClick={() => RenderCanvas.redo()}
                 >
-                    <div className="grid grid-cols-1 grid-rows-3 gap-1.5 mt-3">
-                        <img className="row-span-2 place-self-center" src={RectanglePNG.src}></img>
-                        Rectangle
-                    </div>
+                    Redo
                 </CanvasButton>
-                <CanvasButton 
-                    id="Erase" 
-                    style={eraseStyle} 
-                    type="button" 
-                    handleClick={e => handleDrawTypesClick(e)}
+                <CanvasSelect
+                    id="lineWidth"
+                    style="mb-2 mt-1"
+                    value={lineWidth}
+                    handleChangeItem={lWStr => setLineWidth(lWStr)}
                 >
-                    <div className="grid grid-cols-1 grid-rows-3 gap-1 mt-3">
-                        <img className="row-span-2 place-self-center" src={ErasePNG.src}></img>
-                        Erase
-                    </div>
-                </CanvasButton>
-            </div>
+                    <option value="4">4px</option>
+                    <option value="6">6px</option>
+                    <option value="8">8px</option>
+                </CanvasSelect>
+                <div className="grid grid-rows-2 grid-cols-2 place-content-between">
+                    <CanvasButton
+                        id="Brush" 
+                        style={brushStyle}
+                        type="button" 
+                        handleClick={e => handleDrawTypesClick(e)}
+                    >
+                        <div className="grid grid-cols-1 grid-rows-3">
+                            <img className="row-span-3 place-self-center" src={BrushPNG.src}></img>
+                            Brush
+                        </div>
+                    </CanvasButton>
+                    <CanvasButton 
+                        id="Line" 
+                        style={lineStyle} 
+                        type="button" 
+                        handleClick={e => handleDrawTypesClick(e)}
+                    >
+                        <div className="grid grid-cols-1 grid-rows-3">
+                            <img className="row-span-3 place-self-center" src={StraightLinePNG.src}></img>
+                            Line
+                        </div>
+
+                    </CanvasButton>
+                    <CanvasButton 
+                        id="Rect" 
+                        style={rectStyle} 
+                        type="button" 
+                        handleClick={e => handleDrawTypesClick(e)}
+                    >
+                        <div className="grid grid-cols-1 grid-rows-3 gap-1.5 mt-3">
+                            <img className="row-span-2 place-self-center" src={RectanglePNG.src}></img>
+                            Rectangle
+                        </div>
+                    </CanvasButton>
+                    <CanvasButton 
+                        id="Erase" 
+                        style={eraseStyle} 
+                        type="button" 
+                        handleClick={e => handleDrawTypesClick(e)}
+                    >
+                        <div className="grid grid-cols-1 grid-rows-3 gap-1 mt-3">
+                            <img className="row-span-2 place-self-center" src={ErasePNG.src}></img>
+                            Erase
+                        </div>
+                    </CanvasButton>
+                </div>
+            </div> 
         </div>
     );
 }

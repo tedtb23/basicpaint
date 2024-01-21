@@ -20,7 +20,7 @@ const DrawingCanvas = ({ id, style }: DrawingCanvasProps) => {
       <canvas
         className={style}
         id={id}
-        width={width * (3/4)}
+        width={width}
         height={height}
         ref={RenderCanvas.getCanvasRef()}
       >

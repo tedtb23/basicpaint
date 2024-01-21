@@ -23,7 +23,8 @@ const CanvasLink = ({
 }: buttonProps) => {
   style += " text-center text-white-700 font-semibold" 
   + " hover:bg-blue-500" 
-  + " rounded border border-zinc-50";
+  + " rounded border border-zinc-50 transition duration-150 ease-in-out transform"
+  + " hover:-translate-y-1 hover:scale-100";
 
   return (
     <a

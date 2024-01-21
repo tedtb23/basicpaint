@@ -9,11 +9,11 @@
  */
 const getDrawTypeStyles = (drawType: DrawTypes) => {
 
-    const activeDrawStyle = "bg-blue-700 shadow-2xl shadow-blue-700";
-    let brushStyle: string = "";
-    let lineStyle: string = "";
-    let rectStyle: string = "";
-    let eraseStyle: string = "";
+    const activeDrawStyle = "bg-blue-700 shadow-2xl shadow-blue-700 hover:scale-100";
+    let brushStyle: string = "hover:scale-100";
+    let lineStyle: string = "hover:scale-100";
+    let rectStyle: string = "hover:scale-100";
+    let eraseStyle: string = "hover:scale-100";
     
     switch(drawType.type) {
         case "Brush":
