@@ -59,10 +59,10 @@ const CanvasSidebar = ({
             </CanvasButton>
             <div className={`flex flex-col ${open ? "": "hidden"}`}>
                 <div className="flex flex-row">
-                    <CanvasInput style="grow hover:scale-100" id="c_in_file"/>
+                    <CanvasInput style="grow" id="c_in_file"/>
                     <CanvasSave
                         download="basicpaint image" 
-                        style="grow hover:scale-100" 
+                        style="grow" 
                         id="c_out_file"
                     >
                         Save

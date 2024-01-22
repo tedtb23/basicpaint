@@ -41,12 +41,13 @@ const CanvasInput = ({
 
     return (
         <>
-            <input 
-                className= "hidden" 
-                type="file"
+            <input  
+                className= "hidden"
+                name={name}
                 id={id}
-                onChange={e => handleChange(e)}
                 ref={inputRef}
+                type="file"
+                onChange={e => handleChange(e)}
             />
             <label 
                 className= {style} 
