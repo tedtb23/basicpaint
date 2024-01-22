@@ -10,7 +10,7 @@ interface CanvasInputProps {
 }
 
 /**
- * Renders an image to RenderCanvas's canvas.
+ * Component which renders an image to RenderCanvas's canvas on click.
  * @returns A button which allows the user to pick a file to input to RenderCanvas's canvas on click.
  */
 const CanvasInput = ({
@@ -20,9 +20,8 @@ const CanvasInput = ({
     inputRef}: CanvasInputProps) => {
 
     style += " text-center text-white-700 font-semibold" 
-    + " hover:bg-blue-500" 
-    + " rounded border border-zinc-50 transition duration-150 ease-in-out transform"
-    + " hover:-translate-y-1 hover:scale-100";
+    + " hover:bg-blue-500 hover:-translate-y-1 hover:scale-100" 
+    + " rounded border border-zinc-50 transition duration-150 ease-in-out transform";
 
     //FIX ME
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +42,7 @@ const CanvasInput = ({
     return (
         <>
             <input 
-                className= "w-[0.1px] h-[0.1px] opacity-0 overflow-hidden absolute z-[-1]" 
+                className= "hidden" 
                 type="file"
                 id={id}
                 onChange={e => handleChange(e)}

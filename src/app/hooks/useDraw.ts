@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, RefObject } from "react";
+import { useState, useRef, useEffect } from "react";
 import RenderCanvas from "../RenderCanvas"
 
 /**
@@ -14,7 +14,7 @@ import RenderCanvas from "../RenderCanvas"
 export const useDraw = (
   color: string, 
   lineWidth: number, 
-  drawType: DrawTypes) => {
+  drawType: string) => {
 
   const startPoint = useRef<Point | null>(null);
   const prevPoint = useRef<Point | null>(null);
@@ -34,14 +34,14 @@ export const useDraw = (
       if(!startPoint.current) startPoint.current = currPoint;
 
       let currComponent: any;
-      switch(drawType.type) {
+      switch(drawType) {
         case "Brush":
           currComponent = {type: "Line", startPoint: prevPoint.current, endPoint: currPoint, 
             lineColor: color, lineWidth: lineWidth };
           RenderCanvas.pushAndRender(currComponent);
         break;
         case "Line": 
-          currComponent = {type: "Line", startPoint: startPoint.current, endPoint: currPoint, 
+          currComponent = {type: drawType, startPoint: startPoint.current, endPoint: currPoint, 
             lineColor: color, lineWidth: lineWidth };
           //allow for the line to temporarily be drawn and redrawn on each mouse move.
           if(prevPoint.current) RenderCanvas.undo();
@@ -49,7 +49,7 @@ export const useDraw = (
           RenderCanvas.clearBuf();
         break;
         case "Rect":
-          currComponent = {type: drawType.type, startPoint: startPoint.current, 
+          currComponent = {type: drawType, startPoint: startPoint.current, 
             endPoint: currPoint, color: color};
           //allow for the rectangle to temporarily be drawn and redrawn on each mouse move.
           if(prevPoint.current) RenderCanvas.undo();
@@ -57,7 +57,7 @@ export const useDraw = (
           RenderCanvas.clearBuf();
         break;
         case "Erase":
-          currComponent = {type: "Erase", startPoint: prevPoint.current, endPoint: currPoint, 
+          currComponent = {type: drawType, startPoint: prevPoint.current, endPoint: currPoint, 
             lineColor: "", lineWidth: lineWidth };
           RenderCanvas.pushAndRender(currComponent);
         break;

@@ -1,9 +1,5 @@
-type DrawTypes = {
-    type: string = "Brush" | "Line" | "Rect" | "Erase" | "Image";
-};
-
 type Line = {
-    type: string = "Line" | "Erase";
+    type: string;
     startPoint: Point | null;
     endPoint: Point;
     lineColor: string;
@@ -11,13 +7,13 @@ type Line = {
 };
 
 type Rect = {
-    type: string = "Rect";
+    type: string;
     startPoint: Point;
     endPoint: Point;
     color: string;
 };
 
 type Image = {
-    type: string = "Image";
+    type: string;
     img: HTMLImageElement;
 }

@@ -7,7 +7,7 @@
  * @param drawType The current draw type to determine which draw type button gets the active style.
  * @returns A tuple with the new Tailwind styles of each draw type button.
  */
-const getDrawTypeStyles = (drawType: DrawTypes) => {
+const getDrawTypeStyles = (drawType: string) => {
 
     const activeDrawStyle = "bg-blue-700 shadow-2xl shadow-blue-700 hover:scale-100";
     let brushStyle: string = "hover:scale-100";
@@ -15,7 +15,7 @@ const getDrawTypeStyles = (drawType: DrawTypes) => {
     let rectStyle: string = "hover:scale-100";
     let eraseStyle: string = "hover:scale-100";
     
-    switch(drawType.type) {
+    switch(drawType) {
         case "Brush":
             brushStyle = activeDrawStyle;
         break;

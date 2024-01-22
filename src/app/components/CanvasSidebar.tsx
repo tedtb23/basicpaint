@@ -6,7 +6,7 @@ import CanvasSelect from "./CanvasSelect";
 import getDrawTypeStyles from "../getDrawTypeStyles";
 import CanvasColorPicker from "./CanvasColorPicker";
 import CanvasInput from "./CanvasInput";
-import CanvasLink from "./CanvasLink";
+import CanvasSave from "./CanvasSave";
 import { useState } from "react";
 import BrushPNG from "../../images/Brush.png";
 import StraightLinePNG from "../../images/Straight Line.png";
@@ -22,8 +22,8 @@ interface CanvasSidebarProps {
     setColor: (color: string) => void,
     lineWidth: string,
     setLineWidth: (lWStr: string) => void,
-    drawType: DrawTypes,
-    setDrawType: (drawType: DrawTypes) => void,
+    drawType: string,
+    setDrawType: (drawType: string) => void,
 }
 
 /**
@@ -45,7 +45,7 @@ const CanvasSidebar = ({
 
     //change the current draw type to the clicked draw type button.
     const handleDrawTypesClick = 
-    (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => setDrawType({type: event.currentTarget.id});
+    (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => setDrawType(event.currentTarget.id);
 
     return(  
         <div className={style} id={id}>
@@ -60,14 +60,13 @@ const CanvasSidebar = ({
             <div className={`flex flex-col ${open ? "": "hidden"}`}>
                 <div className="flex flex-row">
                     <CanvasInput style="grow hover:scale-100" id="c_in_file"/>
-                    <CanvasLink 
-                        href={RenderCanvas.toDataURL()}
+                    <CanvasSave
                         download="basicpaint image" 
                         style="grow hover:scale-100" 
                         id="c_out_file"
                     >
                         Save
-                    </CanvasLink>
+                    </CanvasSave>
                 </div>
                 <CanvasColorPicker  color={color} setColor={setColor} />
                 <CanvasButton

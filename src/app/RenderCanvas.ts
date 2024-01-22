@@ -17,7 +17,7 @@ class RenderCanvas{
    */
   public static getCanvasRef() {
     return this.canvasRef ?? null;
-  }
+  };
 
   /**
    * Sets the canvas reference for the class. 
@@ -28,7 +28,7 @@ class RenderCanvas{
   public static setCanvasRef(canvasRef: RefObject<HTMLCanvasElement>) {
     this.canvasRef = canvasRef;
     this.context = canvasRef.current?.getContext("2d");
-  }
+  };
 
 
   /**
@@ -48,7 +48,7 @@ class RenderCanvas{
     not doing this could cause behavior probably not intended by the user
     */
     this.content = this.content.slice(0 , this.contentPos + 1);
-  }
+  };
 
 
   /**
@@ -62,16 +62,17 @@ class RenderCanvas{
    */
   public static pushAndRender (component: Line | Rect | Image) {
     this.render(component, true);
-  }
+  };
 
   /**
    * 
    * @returns The current canvas in the format of a png image in a data URL.
    */
   public static toDataURL() {
-    return this.getCanvas()?.toDataURL() ?? "";
-  }
+    return this.getCanvas()?.toDataURL("image/png") ?? "data:image/png;base64,";
+  };
 
+  //FIX ME
   public static rerender(scale: {x: number, y: number}) {
     if(this.content.length >= 0) {
       this.clear(false);
@@ -82,13 +83,7 @@ class RenderCanvas{
       }
       this.scale({x: scale.x, y: scale.y});
     }
-  }
-
-  public static scale(scale: {x: number, y: number}) {
-    const ctx = this.getContext();
-    if(!ctx) return;
-    ctx.scale(scale.x, scale.y);
-  }
+  };
   
   /**
    * Clears all the content from the canvas.
@@ -237,8 +232,7 @@ class RenderCanvas{
 
     ctx.lineWidth = lWidth;
     ctx.beginPath();
-    ctx.fillStyle = "#000";
-    ctx.clearRect(startPoint.x - 6, startPoint.y - 6, lWidth + 10, lWidth + 10);
+    ctx.clearRect(startPoint.x - 10, startPoint.y - 10, lWidth + 15, lWidth + 15);
     ctx.closePath();
   };
 
@@ -250,17 +244,23 @@ class RenderCanvas{
     const ctx = this.getContext();
     const canvas = this.getCanvas();
     if(!ctx || !canvas) return;
-    ctx.drawImage(image.img, canvas.width / 2, canvas.height / 2);
+    ctx.drawImage(image.img, canvas.width / 6, 0);
   };
 
   private static getCanvas() {
     //if(!this.canvasRef?.current) throw new Error("RenderCanvas has no canvas (has setCanvasRef been called?)");
     return this.canvasRef.current ?? null;
-  }
+  };
 
   private static getContext() {
     //if(!this.context) throw new Error("RenderCanvas has no context (has setCanvasRef been called?)");
     return this.context ?? null;
+  };
+
+  private static scale(scale: {x: number, y: number}) {
+    const ctx = this.getContext();
+    if(!ctx) return;
+    ctx.scale(scale.x, scale.y);
   }
 };
 export default RenderCanvas;
