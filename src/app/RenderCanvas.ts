@@ -6,11 +6,10 @@ import { RefObject } from "react";
  */
 class RenderCanvas{
   private static canvasRef: RefObject<HTMLCanvasElement>;
-  private static savedCanvas: string | null;
+  private static context: CanvasRenderingContext2D | undefined | null;
   private static currComponentsBuf: CanvasElement = {components: []};
   private static content: CanvasElement[] = [];
   private static contentPos: number = -1;
-  private static context: CanvasRenderingContext2D | undefined | null;
 
   /**
    * 
@@ -71,31 +70,6 @@ class RenderCanvas{
    */
   public static toDataURL() {
     return this.getCanvas()?.toDataURL() ?? "";
-  }
-
-  /**
-   * Saves the canvas state in a string data URL.
-   */
-  public static save() {
-    if(this.content.length <= 0) return;
-    const canvas = this.getCanvas();
-    if(!canvas) return;
-    this.savedCanvas = canvas.toDataURL("image/png");
-    this.clear(false);
-  }
-
-  /**
-   * Restores the saved canvas state to the canvas.
-   */
-  public static restore(scale?: {x: number, y: number}) {
-    if(!this.savedCanvas) return;
-    const ctx = this.getContext();
-    if(!ctx) return;
-    const img = new Image();
-    img.src = this.savedCanvas;
-    img.onload = () => ctx.drawImage(img, 0, 0);
-    this.savedCanvas = null;
-    if(scale) this.scale(scale);
   }
 
   public static rerender(scale: {x: number, y: number}) {
@@ -274,8 +248,9 @@ class RenderCanvas{
    */
   private static renderImage(image: Image) {
     const ctx = this.getContext();
-    if(!ctx) return;
-    ctx.drawImage(image.img, 0, 0);
+    const canvas = this.getCanvas();
+    if(!ctx || !canvas) return;
+    ctx.drawImage(image.img, canvas.width / 2, canvas.height / 2);
   };
 
   private static getCanvas() {

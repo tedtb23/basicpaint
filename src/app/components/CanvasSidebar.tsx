@@ -50,7 +50,7 @@ const CanvasSidebar = ({
     return(  
         <div className={style} id={id}>
             <CanvasButton 
-              style="border-neutral-800"
+              style="border-0 hover:scale-105"
               type="button"
               id="sidebar_toggle"
               handleClick={() => setOpen(!open)}
@@ -59,11 +59,11 @@ const CanvasSidebar = ({
             </CanvasButton>
             <div className={`flex flex-col ${open ? "": "hidden"}`}>
                 <div className="flex flex-row">
-                    <CanvasInput style="grow" id="c_in_file"/>
+                    <CanvasInput style="grow hover:scale-100" id="c_in_file"/>
                     <CanvasLink 
                         href={RenderCanvas.toDataURL()}
                         download="basicpaint image" 
-                        style="grow" 
+                        style="grow hover:scale-100" 
                         id="c_out_file"
                     >
                         Save
@@ -72,7 +72,7 @@ const CanvasSidebar = ({
                 <CanvasColorPicker  color={color} setColor={setColor} />
                 <CanvasButton
                     id="clear"
-                    style="my-2"
+                    style="my-2 hover:scale-105"
                     type="reset"
                     handleClick={() => RenderCanvas.clear(true)}
                 >
@@ -80,7 +80,7 @@ const CanvasSidebar = ({
                 </CanvasButton>
                 <CanvasButton
                     id="undo"
-                    style="mb-2"
+                    style="mb-2 hover:scale-105"
                     type="button"
                     handleClick={() => RenderCanvas.undo()}
                 >
@@ -88,7 +88,7 @@ const CanvasSidebar = ({
                 </CanvasButton>
                 <CanvasButton
                     id="redo"
-                    style="mb-1"
+                    style="mb-1 hover:scale-105"
                     type="button"
                     handleClick={() => RenderCanvas.redo()}
                 >
@@ -96,7 +96,7 @@ const CanvasSidebar = ({
                 </CanvasButton>
                 <CanvasSelect
                     id="lineWidth"
-                    style="mb-2 mt-1"
+                    style="mb-2 mt-1 hover:scale-105"
                     value={lineWidth}
                     handleChangeItem={lWStr => setLineWidth(lWStr)}
                 >

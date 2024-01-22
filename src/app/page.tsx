@@ -4,7 +4,6 @@ import DrawingCanvas from "./components/DrawingCanvas";
 import { useDraw } from "./hooks/useDraw"
 import CanvasSidebar from "./components/CanvasSidebar";
 import RenderCanvas from "./RenderCanvas";
-import CanvasButton from "./components/CanvasButton";
 
 /**
  * @returns The main page of the application with a canvas and a sidebar that controls the canvas.
@@ -20,7 +19,7 @@ const page = () => {
   return (
     <div className="relative w-screen h-screen" id="wrapper">
         <CanvasSidebar 
-            style=" z-50 absolute top-0 left-0 overflow-scroll 
+            style="z-50 absolute top-0 left-0 overflow-scroll 
             px-2 py-1 bg-neutral-800 rounded border border-zinc-50 "
             id="sidebar"
             color={color} 
