@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import RenderCanvas from "../RenderCanvas";
 
 /**
@@ -8,12 +8,12 @@ import RenderCanvas from "../RenderCanvas";
  * @returns The width and height which the canvas should assume.
  */
 export const useCanvasResize = () => {
-    let size = {width: 1600, height: 600};
+    const [size, setSize] = useState({width: 1600, height: 600});
 
     useEffect(() => {
         if(typeof window === 'undefined') return;
         const { innerWidth: width, innerHeight: height } = window;
-        size = {width: width, height: height};
+        setSize({width: width, height: height});
     }, []);
     useEffect(() => {
         if(typeof window === 'undefined') return;
