@@ -1,15 +1,20 @@
 # basicpaint
+
 A web based paint program using React. Currently supports brush, line, rectangle, and erase draw types with plans to add more.
 
 # Hosted at https://basicpaint.vercel.app/
-# OR
-# Clone this repository
 
-### Prerequisites
+**OR**
+
+### Clone this repository
+
+#### Prerequisites:
+
 * npm >= 10.2.5
 * node >= 18.18.2
 
-### First, clone the repository and install node modules:
+#### First, clone the repository and install node modules:
+
 * Open a terminal to the directory you want basicpaint downloaded in.
 ```bash
 git clone https://github.com/tedtb23/basicpaint
@@ -19,7 +24,8 @@ git clone https://github.com/tedtb23/basicpaint
 npm install
 ```
 
-### Second, run the development server:
+#### Second, run the development server:
+
 ```bash
 npm run dev
 ```
