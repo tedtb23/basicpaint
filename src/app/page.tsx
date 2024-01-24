@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import DrawingCanvas from "./components/DrawingCanvas";
 import { useDraw } from "./hooks/useDraw"
 import CanvasSidebar from "./components/CanvasSidebar";

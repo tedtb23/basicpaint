@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import RenderCanvas from "../RenderCanvas";
 
 /**
  * Finds the dimensions of the current window and rerenders
  * the canvas to fit the new dimensions.
  * 
- * @returns The width(x) and height(y) which the canvas should assume.
+ * @returns The width and height which the canvas should assume.
  */
 export const useCanvasResize = () => {
     let size = {width: 1600, height: 600};

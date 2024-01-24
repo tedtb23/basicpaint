@@ -94,6 +94,7 @@ class RenderCanvas{
   
   /**
    * Clears all the content from the canvas.
+   * 
    * @param clearContent Determines whether or not undo/redo stack will be cleared.
    */
   public static clear (clearContent: boolean) {
@@ -141,6 +142,7 @@ class RenderCanvas{
 
   /**
    * Renders the given component to the canvas.
+   * 
    * @param component The component to render to the canvas.
    * @param push Determines whether or not the given component will be pushed into the current component buffer.
    */
@@ -170,6 +172,7 @@ class RenderCanvas{
   
   /**
    * Renders the given line to the canvas.
+   * 
    * @param line The line to render to the canvas.
    */
   private static renderLine (line: Line) {
@@ -199,6 +202,7 @@ class RenderCanvas{
 
   /**
    * Renders the given rectangle to the canvas.
+   * 
    * @param rect The rectangle to render to the canvas.
    */
   private static renderRect (rect: Rect) {
@@ -229,6 +233,7 @@ class RenderCanvas{
   /**
    * Erases a rectangle surrounding the 
    * given lines startpoint (or endpoint if the line's startpoint is null) from the canvas.
+   * 
    * @param line The line who's surroundings at the startpoint will be erased.
    */
   private static erase(line: Line) {
@@ -245,6 +250,7 @@ class RenderCanvas{
 
   /**
    * Renders the given image to the canvas.
+   * 
    * @param image The image to render to the canvas.
    */
   private static renderImage(image: Image) {
