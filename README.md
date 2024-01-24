@@ -31,3 +31,22 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+
+##### Dependencies
+
+* Next
+* React
+* [React-Colorful](https://www.npmjs.com/package/react-colorful)
+* React-DOM
+
+##### Dev Dependencies
+
+* Node
+* React
+* React-DOM
+* Autoprefixer
+* ESLint
+* PostCSS
+* TailwindCSS
+* TypeScript
