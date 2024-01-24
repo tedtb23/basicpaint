@@ -6,7 +6,7 @@ A web based paint program using React. Currently supports brush, line, rectangle
 
 **OR**
 
-### Clone this repository
+## Clone this repository
 
 #### Prerequisites:
 
