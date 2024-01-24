@@ -12,7 +12,7 @@ interface DrawingCanvasProps {
  * @returns A canvas with a preset Tailwind style and referenced to RenderCanvas's canvas.
  */
 const DrawingCanvas = ({ id, style }: DrawingCanvasProps) => {
-  const {x: width, y: height} = useCanvasResize();
+  const {width: width, height: height} = useCanvasResize();
 
   style += " cursor-crosshair bg-stone-400 border border-black rounded"
   return (

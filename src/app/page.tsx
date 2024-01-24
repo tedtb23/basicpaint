@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import DrawingCanvas from "./components/DrawingCanvas";
 import { useDraw } from "./hooks/useDraw"
 import CanvasSidebar from "./components/CanvasSidebar";
@@ -13,7 +13,7 @@ const Page = () => {
   const [lineWidth, setLineWidth] = useState("4");
   const [drawType, setDrawType] = useState("Brush");
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  RenderCanvas.setCanvasRef(canvasRef);
+  RenderCanvas.setCanvasRef(canvasRef)
   useDraw(color, Number(lineWidth), drawType);
   
   return (

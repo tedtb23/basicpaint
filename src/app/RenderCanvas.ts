@@ -72,16 +72,23 @@ class RenderCanvas{
     return this.getCanvas()?.toDataURL("image/png") ?? "data:image/png;base64,";
   };
 
-  //FIX ME
-  public static rerender(scale: {x: number, y: number}) {
+  /**
+   * Resizes the canvas to the given dimensions and redraws
+   * all canvas elements.
+   * 
+   * @param size The new size of the canvas.
+   */
+  public static resizeCanvas(size: {width: number, height: number}) {
+    const canvas = this.getCanvas();
+    if(!canvas) return;
+    canvas.width = size.width;
+    canvas.height = size.height;
     if(this.content.length >= 0) {
-      this.clear(false);
       for(let element of this.content) {
         for(let component of element.components) {
           this.render(component, false);
         }
       }
-      this.scale({x: scale.x, y: scale.y});
     }
   };
   
@@ -256,11 +263,5 @@ class RenderCanvas{
     //if(!this.context) throw new Error("RenderCanvas has no context (has setCanvasRef been called?)");
     return this.context ?? null;
   };
-
-  private static scale(scale: {x: number, y: number}) {
-    const ctx = this.getContext();
-    if(!ctx) return;
-    ctx.scale(scale.x, scale.y);
-  }
 };
 export default RenderCanvas;

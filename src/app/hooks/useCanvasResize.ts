@@ -8,19 +8,18 @@ import RenderCanvas from "../RenderCanvas";
  * @returns The width(x) and height(y) which the canvas should assume.
  */
 export const useCanvasResize = () => {
-    const [size, setSize] = useState({x: 1600, y: 600});
+    let size = {width: 1600, height: 600};
 
     useEffect(() => {
         if(typeof window === 'undefined') return;
         const { innerWidth: width, innerHeight: height } = window;
-        setSize({x: width, y: height});
+        size = {width: width, height: height};
     }, []);
     useEffect(() => {
         if(typeof window === 'undefined') return;
         window.onresize = () => {
             const { innerWidth: width, innerHeight: height } = window;
-            setSize({x: width, y: height});
-            RenderCanvas.rerender({x: size.x, y: size.y});
+            RenderCanvas.resizeCanvas({width: width, height: height});
         }
     });
     return size;
