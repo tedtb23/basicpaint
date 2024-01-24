@@ -23,7 +23,7 @@ const CanvasButton = ({
   handleClick,
   buttonRef
 }: buttonProps) => {
-  style += " text-center text-white-700 font-semibold" 
+  style += " text-center text-white font-semibold" 
   + " hover:bg-blue-500 hover:-translate-y-1" 
   + " rounded border border-zinc-50 transition duration-150 ease-in-out transform";
 

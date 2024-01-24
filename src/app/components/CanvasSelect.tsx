@@ -24,7 +24,7 @@ const CanvasSelect = ({
     handleChangeItem,
     selectRef}: CanvasSelectProps) => {
 
-    style += " py-1.5 bg-neutral-800 text-center text-white-700 font-semibold"
+    style += " py-1.5 bg-neutral-800 text-center text-white font-semibold"
     + " hover:bg-blue-500 hover:-translate-y-1 hover:scale-105"
     + " rounded border border-zinc-50 transition duration-150 ease-in-out transform";
 
