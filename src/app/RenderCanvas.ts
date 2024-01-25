@@ -6,7 +6,6 @@ import { RefObject } from "react";
  */
 class RenderCanvas{
   private static canvasRef: RefObject<HTMLCanvasElement>;
-  private static context: CanvasRenderingContext2D | undefined | null;
   private static currComponentsBuf: CanvasElement = {components: []};
   private static content: CanvasElement[] = [];
   private static contentPos: number = -1;
@@ -27,7 +26,6 @@ class RenderCanvas{
    */
   public static setCanvasRef(canvasRef: RefObject<HTMLCanvasElement>) {
     this.canvasRef = canvasRef;
-    this.context = canvasRef.current?.getContext("2d");
   };
 
 
@@ -262,12 +260,12 @@ class RenderCanvas{
 
   private static getCanvas() {
     //if(!this.canvasRef?.current) throw new Error("RenderCanvas has no canvas (has setCanvasRef been called?)");
-    return this.canvasRef.current ?? null;
+    return this.canvasRef?.current ?? null;
   };
 
   private static getContext() {
     //if(!this.context) throw new Error("RenderCanvas has no context (has setCanvasRef been called?)");
-    return this.context ?? null;
+    return this.getCanvas()?.getContext("2d") ?? null;
   };
 };
 export default RenderCanvas;

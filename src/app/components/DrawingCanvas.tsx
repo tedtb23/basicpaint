@@ -1,4 +1,5 @@
 'use client';
+import { useRef } from "react";
 import RenderCanvas from "../RenderCanvas";
 import { useCanvasResize } from "../hooks/useCanvasResize";
 
@@ -13,6 +14,8 @@ interface DrawingCanvasProps {
  */
 const DrawingCanvas = ({ id, style }: DrawingCanvasProps) => {
   const {width: width, height: height} = useCanvasResize();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  RenderCanvas.setCanvasRef(canvasRef);
 
   style += " cursor-crosshair bg-stone-400 border border-black rounded"
   return (

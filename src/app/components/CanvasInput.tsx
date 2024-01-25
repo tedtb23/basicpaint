@@ -22,8 +22,7 @@ const CanvasInput = ({
     style += " text-center text-white font-semibold" 
     + " hover:bg-blue-500 hover:-translate-y-1 hover:scale-100" 
     + " rounded border border-zinc-50 transition duration-150 ease-in-out transform";
-
-    //FIX ME
+    
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const fl = event.target.files;
         if(!fl) return;
