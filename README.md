@@ -16,17 +16,17 @@ A web-based paint program using React. Currently supports brush, line, rectangle
 #### First, clone the repository and install node modules:
 
 * Open a terminal to the directory you want basicpaint downloaded in.
-```bash
+```console
 git clone https://github.com/tedtb23/basicpaint
 ```
 * Navigate inside the newly created basicpaint folder.
-```bash
+```console
 npm install
 ```
 
 #### Second, run the development server:
 
-```bash
+```console
 npm run dev
 ```
 
