@@ -1,6 +1,6 @@
 # basicpaint
 
-A web-based paint program using React. Currently supports brush, line, rectangle, and erase draw types with plans to add more.
+A web-based paint program using Next.js. Currently supports brush, line, rectangle, and erase draw types with plans to add more.
 
 ## Hosted at https://basicpaint.vercel.app/
 
